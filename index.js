@@ -48,8 +48,7 @@ if (process.env.NODE_ENV !== 'production') {
 ///
 /// API Body
 ///
-const router = express.Router();
-router.get('/today', async (req, res, next) => {
+async function handler(req, res, next) {
     const origin = req.get('origin');
     if (origin === undefined)
         logger.info(`Successful response`);
@@ -68,7 +67,11 @@ router.get('/today', async (req, res, next) => {
         error: "current_weekday_is_weekend",
         data: []
     });
-});
+}
+
+const router = express.Router();
+router.post('/today', handler);
+router.get('/today', handler);
 
 const app = express();
 app.use(router);
