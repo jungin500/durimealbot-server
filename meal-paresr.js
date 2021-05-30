@@ -2,6 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const iconv = require('iconv-lite')
 const moment = require('moment');
+const qs = require('querystring')
 
 const BASE_URL = 'http://www.knucoop.or.kr/weekly_menu_02.asp';
 
@@ -76,6 +77,28 @@ async function fetchThisWeek() {
     return parsedData;
 }
 
+const SEARCH_API_KEY = 'AIzaSyBvozkrLXrkDRCZ-sFKirFUOOUetJ7cA5g';
+
+async function fetchThumbnail(query) {
+    try {
+        const requestUrl = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyBvozkrLXrkDRCZ-sFKirFUOOUetJ7cA5g&cx=bc56512ced7746fa3&q=' + qs.escape(query);
+        const searchResponse = (await axios.request(requestUrl)).data;
+        if (!(searchResponse.items && searchResponse.items.length > 5))
+            throw new Error('ENOSRST');
+
+        const richResponses = searchResponse.items.filter(item => item.pagemap && item.pagemap.cse_thumbnail);
+        if (richResponses.length === 0)
+            return null;
+
+        return richResponses[0].pagemap.cse_thumbnail[0].src;
+    } catch (e) {
+        return null;
+    }
+}
+
+
 module.exports = {
-    fetchThisWeek: fetchThisWeek
+    BASE_URL: BASE_URL,
+    fetchThisWeek: fetchThisWeek,
+    fetchThumbnail: fetchThumbnail
 }
