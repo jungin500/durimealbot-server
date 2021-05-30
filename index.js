@@ -79,11 +79,11 @@ async function handler(req, res, next) {
                 continue;
             }
                 
-            const thumbnailUrl = await parser.fetchThumbnail(val);
+            // const thumbnailUrl = await parser.fetchThumbnail(val);
             richMealInfo.push({
                 title: val,
                 // description: '맛있는 반찬',
-                imageUrl: thumbnailUrl? thumbnailUrl : undefined,
+                // imageUrl: thumbnailUrl? thumbnailUrl : undefined,
                 link: { web: parser.BASE_URL }
             });
         }
