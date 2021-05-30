@@ -82,6 +82,8 @@ app.use((req, res, next) => {
     });
     res.send();
 });
-app.listen(8080, () => {
-    logger.info("Starting durimealbot server @8080")
+
+const listen_port = process.env.PORT || 8080;
+app.listen(listen_port, () => {
+    logger.info(`Starting durimealbot server @${listen_port}`)
 });
